@@ -1,0 +1,13 @@
+{
+    "Settings": {
+        "Paths": {
+            "Downloaded": "fakepath\\Resources",
+            "Output": "fakepath\\output",
+            "Temp": "fakepath\\temp",
+            "Queue": "fakepath\\Resources",
+            "Ffmpeg": "fakepath\\ffmpeg"
+        },
+        "KeepTempFiles": true,
+        "TestVideoV": "MlM03X6qpoE"
+    }
+}

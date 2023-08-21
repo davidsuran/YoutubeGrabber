@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="BeforeBuild">
+	
+<Target Name="test" BeforeTargets="Build">
+<Message Importance="High" Text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
+</Target>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpGrabber" Version="2.1.1" />
+    <PackageReference Include="SharpGrabber.YouTube" Version="1.5.0" />
+  </ItemGroup>
+
+
+	<PropertyGroup>
+		<ResourceSourceDirectory>$(MSBuildProjectDirectory)\Resources</ResourceSourceDirectory>
+		<ResourceDestinationDirectory>"$(MSBuildProjectDirectory)\$(OutputPath)"</ResourceDestinationDirectory>
+	</PropertyGroup>
+	<Target Name="CopyResourcesToExe" AfterTargets="Build">
+		<ItemGroup>
+			<ResourceFiles Include="$(MSBuildProjectDirectory)\Resources\*.*"/>
+		</ItemGroup>
+		<!--<Copy
+	SourceFiles="@(MySourceFiles)"
+	DestinationFolder="$(OutputPath)"
+        />-->
+		<Copy
+            SourceFiles="@(ResourceFiles)"
+            DestinationFolder="$(MSBuildProjectDirectory)\$(OutputPath)\Resources"
+        />
+		<Message Text="text to output ALWAYS" Importance="high" />
+		<Message Text="$(MSBuildProjectDirectory)\$(OutputPath)" Importance="high" />
+		<Message Text="text to output ALWAYS" Importance="high" />
+
+		<Message Text="$(ResourceDestinationDirectory)" Importance="high" />
+		<Message Text="$(ResourceSourceDirectory)" Importance="high" />
+		<Message Text="$(MSBuildProjectDirectory)\Resources\*.*" Importance="high" />
+
+
+		<!--<Copy	SourceFiles="@(MySourceFiles)"	DestinationFolder="c:\MyDestinationTree\%(RecursiveDir)"        />-->
+
+		<!--<Message Text="$(IntermediateOutputPath)" Importance="high" />-->
+		<!--<Message Text="$(OutputPath)" Importance="high" />-->
+		
+	</Target>
+
+
+</Project>
