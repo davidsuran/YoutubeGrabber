@@ -1,6 +1,7 @@
 ﻿using DotNetTools.SharpGrabber;
 using DotNetTools.SharpGrabber.Grabbed;
 using System.Diagnostics;
+using System.Text;
 using File = System.IO.File;
 
 namespace YoutubeGrabber
@@ -66,6 +67,8 @@ namespace YoutubeGrabber
 
             string youtubeVideoTitle = Helper.GetYoutubeVideoTitle(result);
             Console.WriteLine(FormattableString.Invariant($"Downloading: {youtubeVideoTitle}"));
+            
+            DownloadedVideos.Instance.Add(v);
 
             try
             {
@@ -112,8 +115,8 @@ namespace YoutubeGrabber
             string youtubeVideoTitle = Helper.GetYoutubeVideoTitle(result);
             string audioPath = await DownloadMedia(audioStream, result, Helper.GetAudioFileName(v), Helper.GetYoutubeVideoTitle(result), v);
 
-            DownloadQueue.Instance.UpdateFile();
             DownloadedVideos.Instance.Add(v, f => (youtubeVideoTitle, true, f.video, f.audio));
+            DownloadQueue.Instance.UpdateFile();
         }
 
         /// <summary>
@@ -133,7 +136,6 @@ namespace YoutubeGrabber
 
             string videoPath = await DownloadMedia(videoStream, result, Helper.GetVideoFileName(v), Helper.GetYoutubeVideoTitle(result), v);
 
-            DownloadQueue.Instance.UpdateFile();
             DownloadedVideos.Instance.Add(v, f => (f.title, f.audio, true, f.audio));
         }
 
@@ -193,7 +195,12 @@ namespace YoutubeGrabber
         /// <returns></returns>
         private static async Task<string> DownloadMedia(GrabbedMedia media, IGrabResult grabResult, string fileName, string title, string v)
         {
-            string tempFolderName = FormattableString.Invariant($"{v}_{title}");
+            StringBuilder tempFolderName = new StringBuilder();
+            char[] invalidChars = Path.GetInvalidPathChars();
+            foreach (char c in FormattableString.Invariant($"{v}_{title}"))
+            {
+                tempFolderName.Append(invalidChars.Contains(c) ? '_' : c);
+            }
 
             Console.WriteLine("Downloading {0}...", media.Title ?? media.FormatTitle ?? media.Resolution);
             using var response = await Client.GetAsync(media.ResourceUri);

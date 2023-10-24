@@ -152,9 +152,16 @@ namespace YoutubeGrabber
 
             (string title, bool audio, bool video, bool merged) kvp = _downloadedDictionary[v];
             _downloadedDictionary[v] = (kvp.title, kvp.audio, kvp.video, true);
+        }
 
+        internal void Add(string v)
+        {
+            if (_downloadedDictionary.ContainsKey(v))
+            {
+                throw new ArgumentException(FormattableString.Invariant($"Video {v} is already in downloaded dictionary."));
+            }
 
-            //Add(v, f => f.audio);
+            _downloadedDictionary.Add(v, (v, false, false, false));
         }
 
         internal void Add(string v, Func<(string title, bool audio, bool video, bool merged), (string title, bool audio, bool video, bool merged)> func)
